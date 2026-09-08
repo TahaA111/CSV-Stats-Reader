@@ -1,0 +1,64 @@
+body {
+    font-family: system-ui, sans-serif;
+    background-color: #f4f4f8;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    padding: 40px;
+
+}
+h1 {
+  font-weight: 600;
+  color: #2b2b3d;
+  margin-bottom: 10px;
+}
+
+#results {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  width: 300px;
+  height: auto;
+  font-family: sans-serif;
+  margin: 20px auto;
+}
+
+#results p {
+  margin: 8px 0;
+  font-size: 18px;
+}
+
+#chartContainer {
+ background-color: #f7f5f5;
+ width: 600px;
+ height: 350px;
+ margin: 40px auto;
+ align-items: center;
+ 
+}
+
+input[type="file"]{
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+#usageChart {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-top: 24px;
+  width: 100% !important;
+  max-width: 650px;
+  height: 380px !important;
+  box-sizing: border-box;
+}
+#minDisplay, #maxDisplay {
+    font-weight: bold;
+    color: #2b2b3d;
+    width: 100%;
+}
