@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CSV Stats Reader</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="chart.umd.min.js"></script>
+  <script src="jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <h1>CSV Stats Reader</h1>
+
+  <input type="file" id="fileinput">
+
+  <div id="results">
+    <p id="totalDisplay"></p>
+    <p id="averageDisplay"></p>
+    <p id="minDisplay"></p>
+    <p id="maxDisplay"></p>
+    <p id="costDisplay"></p>
+  </div>
+
+  <canvas id="usageChart"></canvas>
+
+  <button id="savePdfButton" style="display: none;">Save Summary as PDF</button>
+
+  <script>
+
+    let kwhValues = [];
+    let dateLabels = [];
+    let total = 0;
+    let count = 0;
+    let min = Infinity;
+    let max = -Infinity;
+    let minDate = "";
+    let maxDate = "";
+    let average;
+
+    document.getElementById("fileinput").addEventListener("change", function(event){
+
+      let reader = new FileReader();
+
+      reader.onload = function(){
+
+        kwhValues = [];
+        dateLabels = [];
+        let lines = reader.result.split("\n");
+        total = 0;
+        count = 0;
+        min = Infinity;
+        max = -Infinity;
+        minDate = "";
+        maxDate = "";
+
+        for (let i = 1; i < lines.length; i++){
+
+          if (lines[i] === "") { continue; }
+
+          let parts = lines[i].split(",");
+          let kwh = Number(parts[1]);
+
+          total += kwh;
+          kwhValues.push(kwh);
+          dateLabels.push(parts[0]);
+          count++;
+
+          fetch('http://localhost:3000/readings', {
+            method: 'POST',
+            headers: {'Content-Type' : 'application/json'},
+            body: JSON.stringify({date: parts[0], kwh : kwh})
+
+          });
+
+          if (kwh < min){
+            min = kwh;
+            minDate = parts[0];
+          }
+          if (kwh > max){
+            max = kwh;
+            maxDate = parts[0];
+          }
+        }
+
+        new Chart(document.getElementById("usageChart"), {
+          type: 'line',
+          data: {
+            labels: dateLabels,
+            datasets: [{
+              label: 'kwh Usage',
+              data: kwhValues,
+            }]
+          }
+        });
+
+        average = total / count;
+
+        fetch('http://localhost:3000/summaries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({ total: total, average: average, min: min, max: max})
+        });
+
+        fetch('http://localhost:3000/cost', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body : JSON.stringify({ total : total })
+        })
+          .then(function(res){ return res.json(); })
+          .then(function(data){
+            document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost;
+          });
+
+        document.getElementById("savePdfButton").style.display = "block";
+        document.getElementById("totalDisplay").innerHTML = "Total: " + total;
+        document.getElementById("averageDisplay").innerHTML = "Average: " + average;
+        document.getElementById("minDisplay").innerHTML = " Lowest usage: " + min + " on " + minDate;
+        document.getElementById("maxDisplay").innerHTML = " Highest usage: " + max + " on " + maxDate;
+
+      };
+
+      let file = event.target.files[0];
+      reader.readAsText(file);
+
+    });
+
+    document.getElementById("savePdfButton").addEventListener("click", function(){
+
+      const doc = new jspdf.jsPDF();
+
+      doc.text("Total energy : " + total, 10, 10);
+      doc.text("Average usage : " + average, 10, 20);
+      doc.text("Lowest usage : " + min + " on " + minDate, 10, 30);
+      doc.text("Highest usage : " + max + " on " + maxDate, 10, 40);
+
+      doc.save("energy_stats_summary.pdf");
+    });
+
+  </script>
+
+</body>
+</html>
