@@ -28,6 +28,7 @@
 
     let kwhValues = [];
     let dateLabels = [];
+    let readingsBatch = [];
     let total = 0;
     let count = 0;
     let min = Infinity;
@@ -35,6 +36,7 @@
     let minDate = "";
     let maxDate = "";
     let average;
+    let myChart;
 
     document.getElementById("fileinput").addEventListener("change", function(event){
 
@@ -44,7 +46,9 @@
 
         kwhValues = [];
         dateLabels = [];
+        readingsBatch = [];
         let lines = reader.result.split("\n");
+        let header = lines[0].split(",");
         total = 0;
         count = 0;
         min = Infinity;
@@ -52,24 +56,30 @@
         minDate = "";
         maxDate = "";
 
+        if(header[0] == "date" && header[1] == "kwh"){}
+        else{
+          alert("ERROR file format not supported")
+          return;
+
+        }
+        
+
         for (let i = 1; i < lines.length; i++){
 
           if (lines[i] === "") { continue; }
 
           let parts = lines[i].split(",");
           let kwh = Number(parts[1]);
+          if(isNaN(kwh)){
+            alert("ERROR file uploaded has unsupported data")
+            break;
+          }
 
           total += kwh;
           kwhValues.push(kwh);
           dateLabels.push(parts[0]);
+          readingsBatch.push({date:parts[0], kwh:kwh});
           count++;
-
-          fetch('http://localhost:3000/readings', {
-            method: 'POST',
-            headers: {'Content-Type' : 'application/json'},
-            body: JSON.stringify({date: parts[0], kwh : kwh})
-
-          });
 
           if (kwh < min){
             min = kwh;
@@ -81,7 +91,17 @@
           }
         }
 
-        new Chart(document.getElementById("usageChart"), {
+        fetch('http://localhost:3000/readings',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(readingsBatch)
+          });
+        
+        if (myChart){
+          myChart.destroy();
+        }
+
+        myChart = new Chart(document.getElementById("usageChart"), {
           type: 'line',
           data: {
             labels: dateLabels,
@@ -89,16 +109,30 @@
               label: 'kwh Usage',
               data: kwhValues,
             }]
+          }, 
+          options: {
+            color: '#E8EDF2',
+            scales : {
+              x:{
+                ticks:{color: '#8B98A5'},
+                grid: {color: '#26323F'}
+              },
+              y:{
+                ticks:{color : '#8B98A5'},
+                grid: {color : '#26323F'}
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {color : '#E8EDF2'}
+              }
+            }
           }
         });
 
         average = total / count;
 
-        fetch('http://localhost:3000/summaries', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json'},
-          body: JSON.stringify({ total: total, average: average, min: min, max: max})
-        });
+        
 
         fetch('http://localhost:3000/cost', {
           method: 'POST',
@@ -107,10 +141,17 @@
         })
           .then(function(res){ return res.json(); })
           .then(function(data){
+            fetch('http://localhost:3000/summaries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({ total: total, average: average, min: min, max: max, cost: data.cost})
+          });
             document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost;
           });
 
         document.getElementById("savePdfButton").style.display = "block";
+        document.getElementById("results").style.display = "grid";
+        document.getElementById("usageChart").style.display ="block";
         document.getElementById("totalDisplay").innerHTML = "Total: " + total;
         document.getElementById("averageDisplay").innerHTML = "Average: " + average;
         document.getElementById("minDisplay").innerHTML = " Lowest usage: " + min + " on " + minDate;
