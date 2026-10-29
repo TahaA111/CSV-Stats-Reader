@@ -26,6 +26,9 @@
 
   <script>
 
+
+
+
     let kwhValues = [];
     let dateLabels = [];
     let readingsBatch = [];
@@ -56,7 +59,18 @@
         minDate = "";
         maxDate = "";
 
-        if(header[0] == "date" && header[1] == "kwh"){}
+        /*
+        AVERAGE DEBUGGING SESSION:
+        console.log('Header found:', header);
+        console.log('header[1] char codes:', header[1].split('').map(function(c) { return c.charCodeAt(0); }));
+        console.log('header[0] check:', header[0] == "date");
+        console.log('header[1] check:', header[1] == "kwh");
+        console.log('Comparison result:', header[0] == "date" && header[1] == "kwh");
+        console.log('header[0] length:', header[0].length, JSON.stringify(header[0]));
+        console.log('header[1] length:', header[1].length, JSON.stringify(header[1])); */
+
+        
+        if(header[0] == "date" && header[1].toLowerCase() == "kwh"){}
         else{
           alert("ERROR file format not supported")
           return;
@@ -165,6 +179,7 @@
     });
 
     document.getElementById("savePdfButton").addEventListener("click", function(){
+
 
       const doc = new jspdf.jsPDF();
 

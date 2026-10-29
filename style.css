@@ -117,3 +117,93 @@ input[type="file"]::file-selector-button {
 #savePdfButton:hover {
   background-color: #ffbf5c;
 }
+
+/* Login page */
+body.login-page {
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+#loginForm {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  background-color: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 14px;
+  padding: 40px 32px 32px;
+  box-shadow:
+    0 0 0 1px rgba(242, 169, 59, 0.08),
+    0 20px 50px rgba(0, 0, 0, 0.55),
+    0 0 60px rgba(242, 169, 59, 0.06);
+}
+
+#loginForm::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+#loginForm h1 {
+  font-size: 1.3rem;
+  margin: 0 0 6px 0;
+  text-align: left;
+}
+
+#loginForm .loginSubtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0 0 24px 0;
+}
+
+#loginForm input {
+  display: block;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 11px 14px;
+  border: 1px solid var(--panel-edge);
+  border-radius: 7px;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+#loginForm input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(242, 169, 59, 0.15);
+}
+
+#loginForm input::placeholder {
+  color: var(--text-muted);
+}
+
+#loginForm button {
+  width: 100%;
+  margin-top: 6px;
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bg);
+  background-color: var(--accent);
+  border: none;
+  border-radius: 7px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.15s ease;
+}
+
+#loginForm button:hover {
+  background-color: #ffbf5c;
+}
+
+#loginForm button:active {
+  transform: scale(0.98);
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Log In</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Log In</h1>
+
+  <div id="loginForm">
+    <input type="email" id="loginEmail" placeholder="Email" required>
+    <input type="password" id="loginPassword" placeholder="Password" required>
+    <button id="loginButton">Log In</button>
+  </div>
+
+  <script>
+
+    document.getElementById("loginButton").addEventListener("click", function(){
+
+      let email = document.getElementById("loginEmail").value;
+      let password = document.getElementById("loginPassword").value;
+
+      fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      })
+      .then(function(res){
+        if (res.ok){
+            window.location.href = "index.html";
+            // success
+        } else {
+            alert("LOGIN FAILED");
+            // faliure
+        }
+        return res.json();
+      })
+      .then(function(data){
+        // data is either success info or error info
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
