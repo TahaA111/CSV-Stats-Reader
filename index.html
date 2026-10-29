@@ -105,9 +105,10 @@
           }
         }
 
-        fetch('http://localhost:3000/readings',{
+        fetch('http://127.0.0.1:3000/readings',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
             body: JSON.stringify(readingsBatch)
           });
         
@@ -148,16 +149,18 @@
 
         
 
-        fetch('http://localhost:3000/cost', {
+        fetch('http://127.0.0.1:3000', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json'},
+          credentials: 'include',
           body : JSON.stringify({ total : total })
         })
           .then(function(res){ return res.json(); })
           .then(function(data){
-            fetch('http://localhost:3000/summaries', {
+            fetch('http://127.0.0.1:3000/summaries', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json'},
+          credentials: 'include',
           body: JSON.stringify({ total: total, average: average, min: min, max: max, cost: data.cost})
           });
             document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost;
