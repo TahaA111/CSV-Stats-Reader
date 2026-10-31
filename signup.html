@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+</head>
+<body>
+
+    <div id="signupForm">
+    <input type="text" id="signupUsername" placeholder="Username" required>
+    <input type="email" id="signupEmail" placeholder="Email" required>
+    <input type="password" id="signupPassword" placeholder="Password" required>
+    <button id="signupButton">Sign Up</button>
+  </div>
+
+  <script>
+
+    document.getElementById("signupButton").addEventListener("click", function() {
+        let username = document.getElementById("signupUsername").value;
+        let email = document.getElementById("signupEmail").value;
+        let password = document.getElementById("signupPassword").value;
+
+        fetch('http://127.0.0.1:3000/auth/signup',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username,email,password})
+
+        })
+        .then(function(res){
+            return res.json().then(function(data){
+                if(res.ok){
+                    window.location.href = 'login.html'
+                } else{
+                    alert(data.error || 'Signup failed');
+                }
+            })
+        })
+    });
+
+
+
+
+
+
+
+
+  </script>
+
+</body>
+</html>
