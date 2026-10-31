@@ -86,7 +86,7 @@
           let kwh = Number(parts[1]);
           if(isNaN(kwh)){
             alert("ERROR file uploaded has unsupported data")
-            break;
+            return;
           }
 
           total += kwh;
