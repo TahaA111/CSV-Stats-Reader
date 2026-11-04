@@ -55,7 +55,7 @@
         dateLabels = [];
         readingsBatch = [];
         let lines = reader.result.split("\n");
-        let header = lines[0].split(",");
+        let header = lines[0].split(",").map(function(item){ return item.trim().toLowerCase(); });
         total = 0;
         count = 0;
         min = Infinity;
@@ -74,7 +74,7 @@
         console.log('header[1] length:', header[1].length, JSON.stringify(header[1])); */
 
         
-        if(header[0] == "date" && header[1].toLowerCase() == "kwh"){}
+        if(header[0] == "date" && header[1] == "kwh"){}
         else{
           alert("ERROR file format not supported")
           return;
@@ -84,9 +84,9 @@
 
         for (let i = 1; i < lines.length; i++){
 
-          if (lines[i] === "") { continue; }
+          if (lines[i].trim() === "") { continue; }
 
-          let parts = lines[i].split(",");
+          let parts = lines[i].split(",").map(function(item){ return item.trim();});
           let kwh = Number(parts[1]);
           if(isNaN(kwh)){
             alert("ERROR file uploaded has unsupported data")
