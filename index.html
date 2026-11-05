@@ -30,6 +30,17 @@
 
   <script>
 
+    fetch('http://127.0.0.1:3000/auth/me', {
+      method: 'GET',
+      credentials: 'include'
+    })
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (data.user === null){
+        window.location.href = "login.html";
+      }
+    });
+    
 
 
 
