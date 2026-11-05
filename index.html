@@ -44,6 +44,7 @@
     let maxDate = "";
     let average;
     let myChart;
+    let cost;
 
     document.getElementById("fileinput").addEventListener("change", function(event){
 
@@ -62,6 +63,8 @@
         max = -Infinity;
         minDate = "";
         maxDate = "";
+        cost = undefined;
+
 
         /*
         AVERAGE DEBUGGING SESSION:
@@ -161,22 +164,23 @@
         })
           .then(function(res){ return res.json(); })
           .then(function(data){
+            cost = data.cost;
             fetch('http://127.0.0.1:3000/summaries', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json'},
           credentials: 'include',
           body: JSON.stringify({ total: total, average: average, min: min, max: max, cost: data.cost})
           });
-            document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost;
+            document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost.toFixed(2);
           });
 
         document.getElementById("savePdfButton").style.display = "block";
         document.getElementById("results").style.display = "grid";
         document.getElementById("usageChart").style.display ="block";
-        document.getElementById("totalDisplay").innerHTML = "Total: " + total;
-        document.getElementById("averageDisplay").innerHTML = "Average: " + average;
-        document.getElementById("minDisplay").innerHTML = " Lowest usage: " + min + " on " + minDate;
-        document.getElementById("maxDisplay").innerHTML = " Highest usage: " + max + " on " + maxDate;
+        document.getElementById("totalDisplay").innerHTML = "Total: " + total.toFixed(2) + " kWh";
+        document.getElementById("averageDisplay").innerHTML = "Average: " + average.toFixed(2) + " kWh";
+        document.getElementById("minDisplay").innerHTML = "Lowest usage: " + min.toFixed(2) + " kWh on " + minDate;
+        document.getElementById("maxDisplay").innerHTML = "Highest usage: " + max.toFixed(2) + " kWh on " + maxDate;
 
       };
 
@@ -190,13 +194,23 @@
 
       const doc = new jspdf.jsPDF();
 
-      doc.text("Total energy : " + total, 10, 10);
-      doc.text("Average usage : " + average, 10, 20);
-      doc.text("Lowest usage : " + min + " on " + minDate, 10, 30);
-      doc.text("Highest usage : " + max + " on " + maxDate, 10, 40);
+      if(cost !== undefined) {
+        doc.text("Estimated cost : $" + cost.toFixed(2), 10, 50);
+
+      } else {
+        doc.text("Estimated cost : Not available", 10, 50);
+      }
+
+      doc.text("Total energy : " + total.toFixed(2) + " kWh", 10, 10);
+      doc.text("Average usage : " + average.toFixed(2) + " kWh", 10, 20);
+      doc.text("Lowest usage : " + min.toFixed(2) + " kWh on " + minDate, 10, 30);
+      doc.text("Highest usage : " + max.toFixed(2) + " kWh on " + maxDate, 10, 40);
+      doc.text("Estimated cost : $" + cost.toFixed(2), 10, 50);
 
       doc.save("energy_stats_summary.pdf");
     });
+
+    
 
   </script>
 
