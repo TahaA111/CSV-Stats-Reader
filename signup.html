@@ -18,13 +18,14 @@
   </div>
 
   <script>
+   const API_URL = 'http://127.0.0.1:3000';
 
     document.getElementById("signupButton").addEventListener("click", function() {
         let username = document.getElementById("signupUsername").value;
         let email = document.getElementById("signupEmail").value;
         let password = document.getElementById("signupPassword").value;
 
-        fetch('http://127.0.0.1:3000/auth/signup',{
+        fetch(`${API_URL}/auth/signup`,{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({username,email,password})
