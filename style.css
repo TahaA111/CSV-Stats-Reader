@@ -334,5 +334,34 @@ body.login-page {
 .authSwitch a:hover {
   text-decoration: underline;
 }
+/* Top bar on index.html: title on the left, Log Out on the right */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 650px;
+  margin-bottom: 28px;
+}
 
+.topBar h1 {
+  margin: 0;
+}
 
+#logoutButton {
+  font-family: system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  background-color: transparent;
+  border: 1px solid var(--accent-dim);
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+#logoutButton:hover {
+  border-color: var(--accent);
+  background-color: rgba(242, 169, 59, 0.08);
+}

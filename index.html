@@ -8,10 +8,13 @@
 </head>
 <body>
 
-  <h1>CSV Stats Reader</h1>
- <p class="uploadHint">
-  Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
-  <a href="sample_usage.csv" download>Download a sample CSV</a>
+<header class = "topBar">
+<h1>CSV Stats Reader</h1>
+<button id ="logoutButton">Log Out</button>
+</header>
+<p class="uploadHint">
+Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
+<a href="sample_usage.csv" download>Download a sample CSV</a>
 </p>
 
   <input type="file" id="fileinput">
@@ -27,8 +30,22 @@
   <canvas id="usageChart"></canvas>
 
   <button id="savePdfButton" style="display: none;">Save Summary as PDF</button>
+  
 
   <script>
+
+    document.getElementById("logoutButton").addEventListener("click", function(){
+      fetch('http://127.0.0.1:3000/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      }).then(function(res){
+        if (res.ok){
+          window.location.href = "login.html";
+        } else {
+          alert("LOGOUT FAILED");
+        }
+      });
+      });
 
     fetch('http://127.0.0.1:3000/auth/me', {
       method: 'GET',
