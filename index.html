@@ -189,26 +189,23 @@
 
     });
 
-    document.getElementById("savePdfButton").addEventListener("click", function(){
+  document.getElementById("savePdfButton").addEventListener("click", function(){
 
+  const doc = new jspdf.jsPDF();
 
-      const doc = new jspdf.jsPDF();
+  doc.text("Total energy : " + total.toFixed(2) + " kWh", 10, 10);
+  doc.text("Average usage : " + average.toFixed(2) + " kWh", 10, 20);
+  doc.text("Lowest usage : " + min.toFixed(2) + " kWh on " + minDate, 10, 30);
+  doc.text("Highest usage : " + max.toFixed(2) + " kWh on " + maxDate, 10, 40);
 
-      if(cost !== undefined) {
-        doc.text("Estimated cost : $" + cost.toFixed(2), 10, 50);
+  if (cost !== undefined) {
+    doc.text("Estimated cost : $" + cost.toFixed(2), 10, 50);
+  } else {
+    doc.text("Estimated cost : Not available", 10, 50);
+  }
 
-      } else {
-        doc.text("Estimated cost : Not available", 10, 50);
-      }
-
-      doc.text("Total energy : " + total.toFixed(2) + " kWh", 10, 10);
-      doc.text("Average usage : " + average.toFixed(2) + " kWh", 10, 20);
-      doc.text("Lowest usage : " + min.toFixed(2) + " kWh on " + minDate, 10, 30);
-      doc.text("Highest usage : " + max.toFixed(2) + " kWh on " + maxDate, 10, 40);
-      doc.text("Estimated cost : $" + cost.toFixed(2), 10, 50);
-
-      doc.save("energy_stats_summary.pdf");
-    });
+  doc.save("energy_stats_summary.pdf");
+});
 
     
 
