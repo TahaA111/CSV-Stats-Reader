@@ -33,9 +33,10 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
   
 
   <script>
+    const API_URL = 'http://127.0.0.1:3000';
 
     document.getElementById("logoutButton").addEventListener("click", function(){
-      fetch('http://127.0.0.1:3000/auth/logout', {
+      fetch(`${API_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include'
       }).then(function(res){
@@ -47,7 +48,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       });
       });
 
-    fetch('http://127.0.0.1:3000/auth/me', {
+    fetch(`${API_URL}/auth/me`, {
       method: 'GET',
       credentials: 'include'
     })
@@ -140,7 +141,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
           }
         }
 
-        fetch('http://127.0.0.1:3000/readings',{
+        fetch(`${API_URL}/readings`,{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -184,7 +185,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
         
 
-        fetch('http://127.0.0.1:3000/cost', {
+        fetch(`${API_URL}/cost`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json'},
           credentials: 'include',
@@ -198,7 +199,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
               document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost.toFixed(2);
             }
             cost = data.cost;
-            fetch('http://127.0.0.1:3000/summaries', {
+            fetch(`${API_URL}/summaries`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json'},
           credentials: 'include',
