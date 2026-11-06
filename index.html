@@ -160,18 +160,21 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
             datasets: [{
               label: 'kwh Usage',
               data: kwhValues,
+              borderColor: '#D9A21B',
+              backgroundColor: 'rgba(217, 162, 27, 0.15)',
+              
             }]
           }, 
           options: {
-            color: '#E8EDF2',
+            color: '#F1EFEA',
             scales : {
               x:{
                 ticks:{color: '#8B98A5'},
                 grid: {color: '#26323F'}
               },
               y:{
-                ticks:{color : '#8B98A5'},
-                grid: {color : '#26323F'}
+                ticks:{color : '#9C9A94'},
+                grid: {color : '#2A2A2D'}
               }
             },
             plugins: {
