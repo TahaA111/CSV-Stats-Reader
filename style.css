@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
 :root {
   --bg: #0F1720;
@@ -8,16 +8,23 @@
   --text-muted: #8B98A5;
   --accent: #F2A93B;
   --accent-dim: #7A5A24;
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 * {
   box-sizing: border-box;
+  
+}
+button, input {
+  font-family: inherit;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--bg);
   color: var(--text);
   display: flex;
@@ -27,7 +34,7 @@ body {
 }
 
 h1 {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.6rem;
   color: var(--text);
@@ -46,7 +53,7 @@ input[type="file"] {
 }
 
 input[type="file"]::file-selector-button {
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: var(--bg);
   background-color: var(--accent);
@@ -74,7 +81,7 @@ input[type="file"]::file-selector-button {
   padding: 16px 18px;
   background-color: var(--panel);
   border-left: 3px solid var(--accent);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.95rem;
   color: var(--text);
   line-height: 1.4;
@@ -102,7 +109,7 @@ input[type="file"]::file-selector-button {
 
 #savePdfButton {
   margin-top: 24px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--bg);
@@ -171,7 +178,7 @@ body.login-page {
   border-radius: 7px;
   background-color: var(--bg);
   color: var(--text);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
 }
 
@@ -188,7 +195,7 @@ body.login-page {
 #loginForm button {
   width: 100%;
   margin-top: 6px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--bg);
@@ -254,7 +261,7 @@ body.login-page {
   border-radius: 7px;
   background-color: var(--bg);
   color: var(--text);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
 }
 
@@ -271,7 +278,7 @@ body.login-page {
 #signupForm button {
   width: 100%;
   margin-top: 6px;
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--bg);
@@ -349,7 +356,7 @@ body.login-page {
 }
 
 #logoutButton {
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--accent);
@@ -385,7 +392,7 @@ body.login-page {
 
 .brandName {
   margin: 0;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -395,7 +402,7 @@ body.login-page {
 
 .brandPitch {
   margin: 0;
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 2.4rem;
   font-weight: 700;
   line-height: 1.1;
