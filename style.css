@@ -466,3 +466,13 @@ body.login-page {
 #signupForm .signupSubtitle {
   text-align: center;
 }
+.formError {
+  color: #E06C75;
+  font-size: 0.85rem;
+  margin: 0 0 12px 0;
+  min-height: 0;
+}
+
+.formError:empty {
+  display: none;
+}
