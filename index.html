@@ -205,7 +205,6 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
           credentials: 'include',
           body: JSON.stringify({ total: total, average: average, min: min, max: max, cost: data.cost})
           });
-            document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost.toFixed(2);
           });
 
         document.getElementById("savePdfButton").style.display = "block";
@@ -219,6 +218,9 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       };
 
       let file = event.target.files[0];
+      if (!file) {
+        return;
+      }
       reader.readAsText(file);
 
     });
