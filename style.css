@@ -462,3 +462,7 @@ body.login-page {
     max-width: none;
   }
 }
+#loginForm .loginSubtitle,
+#signupForm .signupSubtitle {
+  text-align: center;
+}
