@@ -365,3 +365,93 @@ body.login-page {
   border-color: var(--accent);
   background-color: rgba(242, 169, 59, 0.08);
 }
+
+/* ---------- Split-screen auth layout (login + signup) ---------- */
+
+.authLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.brandPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.brandName {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.brandPitch {
+  margin: 0;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.brandPoints {
+  list-style: none;
+  margin: 10px 0 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brandPoints li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* small amber dot instead of a default bullet */
+.brandPoints li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+
+/* the form card fills its half of the grid */
+.authLayout #loginForm,
+.authLayout #signupForm {
+  justify-self: end;
+}
+
+/* phones: stack the brand panel above the card */
+@media (max-width: 760px) {
+  .authLayout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .brandPitch {
+    font-size: 1.8rem;
+  }
+
+  .authLayout #loginForm,
+  .authLayout #signupForm {
+    justify-self: stretch;
+    max-width: none;
+  }
+}
