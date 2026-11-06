@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
 :root {
-  --bg: #0F1720;
-  --panel: #1A2430;
-  --panel-edge: #26323F;
-  --text: #E8EDF2;
-  --text-muted: #8B98A5;
-  --accent: #F2A93B;
-  --accent-dim: #7A5A24;
+  --bg: #0B0B0C;
+  --panel: #151517;
+  --panel-edge: #2A2A2D;
+  --text: #F1EFEA;
+  --text-muted: #9C9A94;
+  --accent: #D9A21B;
+  --accent-dim: #6E5210;
+  --accent-hover: #E8B32E;
+  --accent-rgb: 217, 162, 27;
   --font-display: 'Sora', system-ui, sans-serif;
   --font-body: 'Manrope', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -122,7 +124,7 @@ input[type="file"]::file-selector-button {
 }
 
 #savePdfButton:hover {
-  background-color: #ffbf5c;
+  background-color: var(--accent-hover)
 }
 
 /* Login page */
@@ -141,9 +143,9 @@ body.login-page {
   border-radius: 14px;
   padding: 40px 32px 32px;
   box-shadow:
-    0 0 0 1px rgba(242, 169, 59, 0.08),
+    0 0 0 1px rgba(var(--accent-rgb), 0.08),
     0 20px 50px rgba(0, 0, 0, 0.55),
-    0 0 60px rgba(242, 169, 59, 0.06);
+    0 0 60px rgba(var(--accent-rgb), 0.06);
 }
 
 #loginForm::before {
@@ -185,7 +187,7 @@ body.login-page {
 #loginForm input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(242, 169, 59, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
 }
 
 #loginForm input::placeholder {
@@ -208,7 +210,7 @@ body.login-page {
 }
 
 #loginForm button:hover {
-  background-color: #ffbf5c;
+  background-color: var(--accent-hover);
 }
 
 #loginForm button:active {
@@ -224,9 +226,9 @@ body.login-page {
   border-radius: 14px;
   padding: 40px 32px 32px;
   box-shadow:
-    0 0 0 1px rgba(242, 169, 59, 0.08),
+    0 0 0 1px rgba(var(--accent-rgb), 0.08),
     0 20px 50px rgba(0, 0, 0, 0.55),
-    0 0 60px rgba(242, 169, 59, 0.06);
+    0 0 60px rgba(var(--accent-rgb), 0.06);
 }
 
 #signupForm::before {
@@ -268,7 +270,7 @@ body.login-page {
 #signupForm input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(242, 169, 59, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
 }
 
 #signupForm input::placeholder {
@@ -291,7 +293,7 @@ body.login-page {
 }
 
 #signupForm button:hover {
-  background-color: #ffbf5c;
+  background-color: var(--accent-hover);
 }
 
 #signupForm button:active {
@@ -370,7 +372,7 @@ body.login-page {
 
 #logoutButton:hover {
   border-color: var(--accent);
-  background-color: rgba(242, 169, 59, 0.08);
+  background-color: rgba(var(--accent-rgb), 0.08);
 }
 
 /* ---------- Split-screen auth layout (login + signup) ---------- */
