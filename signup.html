@@ -25,6 +25,7 @@
     <input type="text" id="signupUsername" placeholder="Username" required>
     <input type="email" id="signupEmail" placeholder="Email" required>
     <input type="password" id="signupPassword" placeholder="Password" required>
+    <p class="formError" id="signupError"></p>
     <button id="signupButton">Sign Up</button>
     <p class="authSwitch">Already have an account? <a href="login.html">Log in</a></p>
   </div>
@@ -33,6 +34,9 @@
    const API_URL = 'http://127.0.0.1:3000';
 
     document.getElementById("signupButton").addEventListener("click", function() {
+
+        document.getElementById("signupError").textContent = "";
+
         let username = document.getElementById("signupUsername").value;
         let email = document.getElementById("signupEmail").value;
         let password = document.getElementById("signupPassword").value;
@@ -48,7 +52,7 @@
                 if(res.ok){
                     window.location.href = 'login.html'
                 } else{
-                    alert(data.error || 'Signup failed');
+                    document.getElementById("signupError").textContent = data.error || 'Signup failed';
                 }
             })
         })
