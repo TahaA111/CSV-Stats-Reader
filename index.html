@@ -79,6 +79,8 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
     let average;
     let myChart;
     let cost;
+    let stdDev;
+    let spikeThreshold;
 
     document.getElementById("fileinput").addEventListener("change", function(event){
 
@@ -190,6 +192,19 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         });
 
         average = total / count;
+
+        let sumSquares = 0;
+        for (let i  = 0; i < kwhValues.length; i++){
+
+          let diff = kwhValues[i] - average;
+          sumSquares += diff * diff;
+        
+        }
+        stdDev = Math.sqrt(sumSquares / count);
+
+
+        spikeThreshold = average + 1.5 * stdDev;
+        console.log('stdDev:', stdDev, 'spike threshold:', spikeThreshold)
 
         
 
