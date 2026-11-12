@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>CSV Stats Reader</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <script src="chart.umd.min.js"></script>
@@ -35,6 +36,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
   <script>
     const API_URL = 'http://127.0.0.1:3000';
+    let currentUser = null;
 
     document.getElementById("logoutButton").addEventListener("click", function(){
       fetch(`${API_URL}/auth/logout`, {
@@ -57,6 +59,8 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
     .then(function(data){
       if (data.user === null){
         window.location.href = "login.html";
+      } else {
+        currentUser = data.user;
       }
     });
     
@@ -229,23 +233,106 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
     });
 
-  document.getElementById("savePdfButton").addEventListener("click", function(){
+    function buildReport() {
+      const doc = new jspdf.jsPDF({ unit: "mm", format: 'a4' });
+      const pageW = 210;
+      const pageH = 297;
+      const margin = 16;
+      const contentW = pageW - margin * 2;
 
-  const doc = new jspdf.jsPDF();
+      const ink = [11, 11, 12];
+      const panel = [21, 21, 23];
+      const gold = [217, 162, 27];
+      const text = [30, 30, 32];
+      const muted = [110, 108, 104];
+      const line = [226, 224, 219];
+      const tint = [248, 246, 241];
 
-  doc.text("Total energy : " + total.toFixed(2) + " kWh", 10, 10);
-  doc.text("Average usage : " + average.toFixed(2) + " kWh", 10, 20);
-  doc.text("Lowest usage : " + min.toFixed(2) + " kWh on " + minDate, 10, 30);
-  doc.text("Highest usage : " + max.toFixed(2) + " kWh on " + maxDate, 10, 40);
+      function fmt(n) {return n.toFixed(2);}
 
-  if (cost !== undefined) {
-    doc.text("Estimated cost : $" + cost.toFixed(2), 10, 50);
-  } else {
-    doc.text("Estimated cost : Not available", 10, 50);
-  }
+      doc.setFillColor(...ink);
+      doc.rect(0,0, pageW, 34, 'F');
+      doc.setFillColor(...gold);
+      doc.rect(0,34, pageW, 1.2, 'F');
 
-  doc.save("energy_stats_summary.pdf");
-});
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...gold);
+      doc.setCharSpace(1.2);
+      doc.text('PEAK', margin, 14);
+      doc.setCharSpace(0);
+
+      doc.setFontSize(18);
+      doc.setTextColor(255,255,255);
+      doc.text('Energy Usage Report', margin, 25);
+
+      const generated = new Date().toLocaleDateString('en-US', {year : 'numeric', month: 'short', day: 'numeric'});
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(170, 168, 162);
+      doc.text('Generated ' + generated, pageW - margin, 14, {align: 'right'});
+      if (currentUser && currentUser.username){
+        doc.text('Account: ' + currentUser.username, pageW - margin, 25, {align: 'right'});
+      }
+
+      let y  = 47;
+      const firstDate = dateLabels[0];
+      const lastDate = dateLabels[dateLabels.length - 1];
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(...text);
+      doc.text('Reporting period', margin, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...muted);
+      doc.text(firstDate + '  to  ' + lastDate + '  |  ' + count + 'daily readings', margin + 36, y);
+
+      y += 8;
+      const tiles = [
+        { label: 'TOTAL USAGE', value: fmt(total), unit: 'kWh', note: 'across ' + count + ' days' },
+        { label: 'DAILY AVERAGE', value: fmt(average), unit: 'kWh', note: 'per day' },
+        { label: 'PEAK DAY', value: fmt(max), unit: 'kWh', note: maxDate },
+        { label: 'ESTIMATED COST', value: cost !== undefined ? '$' + fmt(cost) : 'N/A', unit: '', note: cost !== undefined ? 'at CA residential rate' : 'price unavailable' }
+      ];
+      const gap = 4;
+      const tileW = (contentW - gap * 3) / 4;
+      const tileH = 26;
+
+      tiles.forEach(function (t, i) {
+        const x = margin + i * (tileW + gap);
+
+        doc.setFillColor(...tint);
+        doc.setDrawColor(...line);
+        doc.setLineWidth(0.2);
+        doc.roundedRect(x, y, tileW, tileH, 2, 2, 'FD');
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(...muted);
+        doc.text(t.label, x + 4, y + 7);
+
+        doc.setFontSize(15);
+        doc.setTextColor(...text);
+        doc.text(t.value, x + 4, y + 16);
+        if (t.unit) {
+          const w = doc.getTextWidth(t.value);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8);
+          doc.setTextColor(...muted);
+          doc.text(t.unit, x + 5 + w, y + 16);
+        }
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...muted);
+        doc.text(t.note, x + 4, y + 22);
+      });
+
+      return doc;
+
+    }
+      document.getElementById("savePdfButton").addEventListener("click", function(){
+      buildReport().save("PeakEnergyReport.pdf")
+      });
 
     
 
