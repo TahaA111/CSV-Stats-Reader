@@ -155,6 +155,22 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
             body: JSON.stringify(readingsBatch)
           });
         
+    
+
+        average = total / count;
+
+        let sumSquares = 0;
+        for (let i  = 0; i < kwhValues.length; i++){
+
+          let diff = kwhValues[i] - average;
+          sumSquares += diff * diff;
+        
+        }
+        stdDev = Math.sqrt(sumSquares / count);
+
+
+        spikeThreshold = average + 1.5 * stdDev;
+
         if (myChart){
           myChart.destroy();
         }
@@ -206,21 +222,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
             }
           }
         });
-
-        average = total / count;
-
-        let sumSquares = 0;
-        for (let i  = 0; i < kwhValues.length; i++){
-
-          let diff = kwhValues[i] - average;
-          sumSquares += diff * diff;
         
-        }
-        stdDev = Math.sqrt(sumSquares / count);
-
-
-        spikeThreshold = average + 1.5 * stdDev;
-        console.log('stdDev:', stdDev, 'spike threshold:', spikeThreshold)
 
         
 
