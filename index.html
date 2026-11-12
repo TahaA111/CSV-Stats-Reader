@@ -360,7 +360,8 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       }
       y += chartH + 10;
 
-            // ---------- Readings table ----------
+    // Readings table
+
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(11);
       doc.setTextColor(...text);
@@ -434,7 +435,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       doc.setDrawColor(...line);
       doc.line(margin, y, pageW - margin, y);
 
-      
+      // Footer on every page
       const pages = doc.getNumberOfPages();
       for (let p = 1; p <= pages; p++) {
         doc.setPage(p);
