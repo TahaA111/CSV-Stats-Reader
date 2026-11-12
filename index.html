@@ -163,13 +163,29 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
           type: 'line',
           data: {
             labels: dateLabels,
-            datasets: [{
-              label: 'kwh Usage',
-              data: kwhValues,
-              borderColor: '#D9A21B',
-              backgroundColor: 'rgba(217, 162, 27, 0.15)',
-              
-            }]
+            datasets: [
+              {
+                label: 'kWh usage',
+                data: kwhValues,
+                borderColor: '#D9A21B',
+                backgroundColor: 'rgba(217, 162, 27, 0.15)',
+                // red, larger dot for spike days; normal gold dot otherwise
+                pointBackgroundColor: kwhValues.map(function (v) {
+                  return v > spikeThreshold ? '#E06C75' : '#D9A21B';
+                }),
+                pointRadius: kwhValues.map(function (v) {
+                  return v > spikeThreshold ? 6 : 3;
+                })
+              },
+              {
+                label: 'Spike threshold',
+                data: kwhValues.map(function () { return spikeThreshold; }),
+                borderColor: '#E06C75',
+                borderDash: [6, 4],
+                borderWidth: 1.5,
+                pointRadius: 0
+              }
+            ]
           }, 
           options: {
             color: '#F1EFEA',
