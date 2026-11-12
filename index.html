@@ -434,6 +434,19 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       doc.setDrawColor(...line);
       doc.line(margin, y, pageW - margin, y);
 
+      
+      const pages = doc.getNumberOfPages();
+      for (let p = 1; p <= pages; p++) {
+        doc.setPage(p);
+        doc.setDrawColor(...line);
+        doc.line(margin, pageH - 14, pageW - margin, pageH - 14);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...muted);
+        doc.text('Cost estimate uses the latest California residential electricity price from the U.S. Energy Information Administration.', margin, pageH - 9);
+        doc.text('Page ' + p + ' of ' + pages, pageW - margin, pageH - 9, { align: 'right' });
+      }
+
 
       return doc;
 
