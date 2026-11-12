@@ -478,3 +478,7 @@ body.login-page {
 .formError:empty {
   display: none;
 }
+
+#results p:nth-child(6){
+  grid-column: 1 / -1;
+}

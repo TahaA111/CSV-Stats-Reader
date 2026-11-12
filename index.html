@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CSV Stats Reader</title>
+  <title>Peak</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
@@ -11,7 +11,7 @@
 <body>
 
 <header class = "topBar">
-<h1>CSV Stats Reader</h1>
+<h1>Peak</h1>
 <button id ="logoutButton">Log Out</button>
 </header>
 <p class="uploadHint">
@@ -27,6 +27,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
     <p id="minDisplay"></p>
     <p id="maxDisplay"></p>
     <p id="costDisplay"></p>
+    <p id="spikeDisplay"></p>
   </div>
 
   <canvas id="usageChart"></canvas>
@@ -256,6 +257,13 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         document.getElementById("minDisplay").innerHTML = "Lowest usage: " + min.toFixed(2) + " kWh on " + minDate;
         document.getElementById("maxDisplay").innerHTML = "Highest usage: " + max.toFixed(2) + " kWh on " + maxDate;
 
+        let spikeDays = kwhValues.filter(function (v){ return v > spikeThreshold; }).length;
+        if (spikeDays === 0){
+          document.getElementById("spikeDisplay").textContent = "No unusual spikes. Usage stayed within its normal range.";
+        } else {
+          document.getElementById("spikeDisplay").textContent = spikeDays + " spike day" + (spikeDays === 1 ? "" : "s") + " above " + spikeThreshold.toFixed(2) + "kwh (shown in red)";
+        }
+
       };
 
       let file = event.target.files[0];
@@ -464,11 +472,12 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         }
         doc.text((diffPct > 0 ? '+' : '') + diffPct.toFixed(1) + '%', col.diff, y + 4.8, { align: 'right' });
 
-        if (isPeak || isLow) {
+        const isSpike = v > spikeThreshold;
+        if (isPeak || isLow || isSpike) {
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(7.5);
-          doc.setTextColor(...(isPeak ? [180, 60, 50] : [40, 130, 90]));
-          doc.text(isPeak ? 'PEAK' : 'LOWEST', col.flag, y + 4.8, { align: 'right' });
+          doc.setTextColor(...(isLow ? [40, 130, 90] : [180, 60, 50]));
+          doc.text(isPeak ? 'PEAK' : isLow ? 'LOWEST' : 'SPIKE', col.flag, y + 4.8, { align: 'right' });
         }
 
         y += rowH;
