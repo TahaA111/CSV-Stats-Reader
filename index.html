@@ -426,7 +426,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         if (isPeak || isLow) {
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(7.5);
-          doc.setTextColor(...(isPeak ? gold : [40, 130, 90]));
+          doc.setTextColor(...(isPeak ? [180, 60, 50] : [40, 130, 90]));
           doc.text(isPeak ? 'PEAK' : 'LOWEST', col.flag, y + 4.8, { align: 'right' });
         }
 
