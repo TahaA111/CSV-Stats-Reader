@@ -261,7 +261,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         if (spikeDays === 0){
           document.getElementById("spikeDisplay").textContent = "No unusual spikes. Usage stayed within its normal range.";
         } else {
-          document.getElementById("spikeDisplay").textContent = spikeDays + " spike day" + (spikeDays === 1 ? "" : "s") + " above " + spikeThreshold.toFixed(2) + "kwh (shown in red)";
+          document.getElementById("spikeDisplay").textContent = spikeDays + " spike day" + (spikeDays === 1 ? "" : "s") + " above " + spikeThreshold.toFixed(2) + " kwh (shown in red)";
         }
 
       };
