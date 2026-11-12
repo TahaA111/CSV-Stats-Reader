@@ -360,6 +360,80 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       }
       y += chartH + 10;
 
+            // ---------- Readings table ----------
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(...text);
+      doc.text('Daily readings', margin, y);
+      y += 5;
+
+      // x position of each column
+      const col = { date: margin + 4, kwh: margin + 80, diff: margin + 130, flag: pageW - margin - 4 };
+      const rowH = 7;
+
+      function tableHeader() {
+        doc.setFillColor(...ink);
+        doc.rect(margin, y, contentW, rowH, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(255, 255, 255);
+        doc.text('DATE', col.date, y + 4.7);
+        doc.text('USAGE (kWh)', col.kwh, y + 4.7, { align: 'right' });
+        doc.text('VS. AVERAGE', col.diff, y + 4.7, { align: 'right' });
+        doc.text('NOTE', col.flag, y + 4.7, { align: 'right' });
+        y += rowH;
+      }
+
+      tableHeader();
+
+      for (let i = 0; i < kwhValues.length; i++) {
+        // Start a new page if this row would run into the footer
+        if (y + rowH > pageH - 22) {
+          doc.addPage();
+          y = margin;
+          tableHeader();
+        }
+
+        // Shade every other row
+        if (i % 2 === 1) {
+          doc.setFillColor(...tint);
+          doc.rect(margin, y, contentW, rowH, 'F');
+        }
+
+        const v = kwhValues[i];
+        const diffPct = ((v - average) / average) * 100;
+        const isPeak = v === max;
+        const isLow = v === min;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...text);
+        doc.text(dateLabels[i], col.date, y + 4.8);
+
+        doc.setFont('helvetica', isPeak ? 'bold' : 'normal');
+        doc.text(fmt(v), col.kwh, y + 4.8, { align: 'right' });
+
+        doc.setFont('helvetica', 'normal');
+        if (diffPct > 0) {
+          doc.setTextColor(180, 60, 50);
+        } else {
+          doc.setTextColor(40, 130, 90);
+        }
+        doc.text((diffPct > 0 ? '+' : '') + diffPct.toFixed(1) + '%', col.diff, y + 4.8, { align: 'right' });
+
+        if (isPeak || isLow) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7.5);
+          doc.setTextColor(...(isPeak ? gold : [40, 130, 90]));
+          doc.text(isPeak ? 'PEAK' : 'LOWEST', col.flag, y + 4.8, { align: 'right' });
+        }
+
+        y += rowH;
+      }
+
+      doc.setDrawColor(...line);
+      doc.line(margin, y, pageW - margin, y);
+
 
       return doc;
 
