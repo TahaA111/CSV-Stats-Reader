@@ -327,6 +327,40 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         doc.text(t.note, x + 4, y + 22);
       });
 
+      y += tileH + 10;
+      doc.setFontSize('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(...text);
+      doc.text('Daily usage', margin, y);
+      y += 4; 
+
+      const chartH = 70;
+      doc.setFillColor(...panel);
+      doc.roundedRect(margin, y, contentW, chartH, 2.5, 2.5, 'F');
+
+      if(myChart){
+
+        const src = myChart.canvas;
+        const flat = document.createElement('canvas');
+        flat.width = src.width;
+        flat.height = src.height;
+        const ctx = flat.getContext('2d');
+        ctx.fillStyle = '#151517';
+        ctx.fillRect(0,0, flat.width, flat.height );
+        ctx.drawImage(src, 0, 0);
+        const img = flat.toDataURL('image/jpeg', 0.95);
+
+
+        const boxW = contentW - 8;
+        const boxH = chartH - 8;
+        const w = flat.width * scale;
+        const h = flat.height * scale;
+        doc.addImage(img, 'JPEG', margin + 4 + (boxW - w) / 2, y + 4 + (boxH - h) / 2 , w, h);
+
+      }
+      y += chartH + 10;
+
+
       return doc;
 
     }
