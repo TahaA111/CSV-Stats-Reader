@@ -396,7 +396,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
       tableHeader();
 
-      for (let i = 0; i < kwhValues.length; i++) {
+      for (let i = 0; i < rows.length; i++) {
         // Start a new page if this row would run into the footer
         if (y + rowH > pageH - 22) {
           doc.addPage();
@@ -410,7 +410,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
           doc.rect(margin, y, contentW, rowH, 'F');
         }
 
-        const v = kwhValues[i];
+        const v = rows[i];
         const diffPct = ((v - average) / average) * 100;
         const isPeak = v === max;
         const isLow = v === min;
@@ -418,7 +418,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
         doc.setTextColor(...text);
-        doc.text(dateLabels[i], col.date, y + 4.8);
+        doc.text(rows[i], col.date, y + 4.8);
 
         doc.setFont('helvetica', isPeak ? 'bold' : 'normal');
         doc.text(fmt(v), col.kwh, y + 4.8, { align: 'right' });
