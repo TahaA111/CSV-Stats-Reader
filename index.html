@@ -132,6 +132,10 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
             alert("ERROR file uploaded has unsupported data")
             return;
           }
+          if(!/^\d{4}-\d{2}-\d{2}$/.test(parts[0])){
+            alert("ERROR: dates must look like 2026-01-07 (row " + (i + 7) + ")");
+            return;
+          }
 
           total += kwh;
           kwhValues.push(kwh);
@@ -154,6 +158,13 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify(readingsBatch)
+          })
+          .then(function(res){
+            if (!res.ok){
+              return res.json().then(function(data){
+                alert(" Your readings were not saved: " + (data.error || "server error"));
+              });
+            }
           });
         
     
