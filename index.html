@@ -247,9 +247,9 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
           .then(function(res){ return res.json(); })
           .then(function(data){
             if (data.error) {
-              document.getElementById('costDisplay').innerHTML = 'Estimated cost: Not available';
+              document.getElementById('costDisplay').textContent =  'Estimated cost: Not available';
             } else {
-              document.getElementById('costDisplay').innerHTML = 'Estimated cost: $' + data.cost.toFixed(2);
+              document.getElementById('costDisplay').textContent =  'Estimated cost: $' + data.cost.toFixed(2);
             }
             cost = data.cost;
             fetch(`${API_URL}/summaries`, {
@@ -263,16 +263,16 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         document.getElementById("savePdfButton").style.display = "block";
         document.getElementById("results").style.display = "grid";
         document.getElementById("usageChart").style.display ="block";
-        document.getElementById("totalDisplay").innerHTML = "Total: " + total.toFixed(2) + " kWh";
-        document.getElementById("averageDisplay").innerHTML = "Average: " + average.toFixed(2) + " kWh";
-        document.getElementById("minDisplay").innerHTML = "Lowest usage: " + min.toFixed(2) + " kWh on " + minDate;
-        document.getElementById("maxDisplay").innerHTML = "Highest usage: " + max.toFixed(2) + " kWh on " + maxDate;
+        document.getElementById("totalDisplay").textContent = "Total: " + total.toFixed(2) + " kWh";
+        document.getElementById("averageDisplay").textContent = "Average: " + average.toFixed(2) + " kWh";
+        document.getElementById("minDisplay").textContent = "Lowest usage: " + min.toFixed(2) + " kWh on " + minDate;
+        document.getElementById("maxDisplay").textContent = "Highest usage: " + max.toFixed(2) + " kWh on " + maxDate;
 
         let spikeDays = kwhValues.filter(function (v){ return v > spikeThreshold; }).length;
         if (spikeDays === 0){
-          document.getElementById("spikeDisplay").textContent = "No unusual spikes. Usage stayed within its normal range.";
+          document.getElementById("spikeDisplay").innerHTML = "No unusual spikes. Usage stayed within its normal range.";
         } else {
-          document.getElementById("spikeDisplay").textContent = spikeDays + " spike day" + (spikeDays === 1 ? "" : "s") + " above " + spikeThreshold.toFixed(2) + " kwh (shown in red)";
+          document.getElementById("spikeDisplay").innerHTML =  spikeDays + " spike day" + (spikeDays === 1 ? "" : "s") + " above " + spikeThreshold.toFixed(2) + " kwh (shown in red)";
         }
 
       };
