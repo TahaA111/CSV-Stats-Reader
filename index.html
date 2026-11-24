@@ -508,10 +508,10 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(8);
         doc.setTextColor(255, 255, 255);
-        doc.text('DATE', col.date, y + 4.7);
-        doc.text('USAGE (kWh)', col.kwh, y + 4.7, { align: 'right' });
-        doc.text('VS. AVERAGE', col.diff, y + 4.7, { align: 'right' });
-        doc.text('NOTE', col.flag, y + 4.7, { align: 'right' });
+        doc.text('DATE', col.date, y + 4.3);
+        doc.text('USAGE (kWh)', col.kwh, y + 4.3, { align: 'right' });
+        doc.text('VS. AVERAGE', col.diff, y + 4.3, { align: 'right' });
+        doc.text('NOTE', col.flag, y + 4.3, { align: 'right' });
         y += rowH;
       }
 
@@ -547,10 +547,10 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
         doc.setTextColor(...text);
-        doc.text(rows[i].date, col.date, y + 4.8);
+        doc.text(rows[i].date, col.date, y + 4.3);
 
         doc.setFont('helvetica', isPeak ? 'bold' : 'normal');
-        doc.text(fmt(v), col.kwh, y + 4.8, { align: 'right' });
+        doc.text(fmt(v), col.kwh, y + 4.3, { align: 'right' });
 
         doc.setFont('helvetica', 'normal');
         if (diffPct > 0) {
@@ -558,14 +558,14 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         } else {
           doc.setTextColor(40, 130, 90);
         }
-        doc.text((diffPct > 0 ? '+' : '') + diffPct.toFixed(1) + '%', col.diff, y + 4.8, { align: 'right' });
+        doc.text((diffPct > 0 ? '+' : '') + diffPct.toFixed(1) + '%', col.diff, y + 4.3, { align: 'right' });
 
         const isSpike = v > spikeThreshold;
         if (isPeak || isLow || isSpike) {
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(7.5);
           doc.setTextColor(...(isLow ? [40, 130, 90] : [180, 60, 50]));
-          doc.text(isPeak ? 'PEAK' : isLow ? 'LOWEST' : 'SPIKE', col.flag, y + 4.8, { align: 'right' });
+          doc.text(isPeak ? 'PEAK' : isLow ? 'LOWEST' : 'SPIKE', col.flag, y + 4.3, { align: 'right' });
         }
 
         y += rowH;
@@ -584,9 +584,10 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       doc.setFontSize(8);
       doc.setTextColor(...muted);
       doc.text('HOW TO READ THIS REPORT', margin, y);
+      doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.5);
       const howTo = 'Red percentages (%) are above the daily average and green are below. PEAK and LOWEST mark the highest and lowest days. ' +
-        'SPIKE marks an unusally high day: more than 1.5 standard deviations above this period\'s average (above ' + fmt(spikeThreshold) + 'kWh).';
+        'SPIKE marks an unusually high day: more than 1.5 standard deviations above this period\'s average (above ' + fmt(spikeThreshold) + ' kWh).';
       doc.text(doc.splitTextToSize(howTo, contentW), margin, y + 5);
 
       // Footer on every page
