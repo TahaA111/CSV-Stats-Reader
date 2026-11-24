@@ -133,7 +133,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
             return;
           }
           if(!/^\d{4}-\d{2}-\d{2}$/.test(parts[0])){
-            alert("ERROR: dates must look like 2026-01-07 (row " + (i + 7) + ")");
+            alert("ERROR: dates must look like 2026-01-07 (row " + (i + 1) + ")");
             return;
           }
 
@@ -270,9 +270,9 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
         let spikeDays = kwhValues.filter(function (v){ return v > spikeThreshold; }).length;
         if (spikeDays === 0){
-          document.getElementById("spikeDisplay").innerHTML = "No unusual spikes. Usage stayed within its normal range.";
+          document.getElementById("spikeDisplay").textContent = "No unusual spikes. Usage stayed within its normal range.";
         } else {
-          document.getElementById("spikeDisplay").innerHTML =  spikeDays + " spike day" + (spikeDays === 1 ? "" : "s") + " above " + spikeThreshold.toFixed(2) + " kwh (shown in red)";
+          document.getElementById("spikeDisplay").textContent =  spikeDays + " spike day" + (spikeDays === 1 ? "" : "s") + " above " + spikeThreshold.toFixed(2) + " kWh (shown in red)";
         }
 
       };
