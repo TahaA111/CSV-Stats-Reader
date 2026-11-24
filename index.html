@@ -407,7 +407,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       ];
       const gap = 4;
       const tileW = (contentW - gap * 3) / 4;
-      const tileH = 26;
+      const tileH = 22;
 
       tiles.forEach(function (t, i) {
         const x = margin + i * (tileW + gap);
@@ -420,33 +420,64 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(7);
         doc.setTextColor(...muted);
-        doc.text(t.label, x + 4, y + 7);
+        doc.text(t.label, x + 4, y + 6);
 
         doc.setFontSize(15);
         doc.setTextColor(...text);
-        doc.text(t.value, x + 4, y + 16);
+        doc.text(t.value, x + 4, y + 14);
         if (t.unit) {
           const w = doc.getTextWidth(t.value);
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8);
           doc.setTextColor(...muted);
-          doc.text(t.unit, x + 5 + w, y + 16);
+          doc.text(t.unit, x + 5 + w, y + 14);
         }
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(7.5);
         doc.setTextColor(...muted);
-        doc.text(t.note, x + 4, y + 22);
+        doc.text(t.note, x + 4, y + 19);
       });
 
-      y += tileH + 10;
+      y += tileH + 6;
+
+      const spikeCount = kwhValues.filter(function (v) { return v > spikeThreshold; }).length;
+      const peakPct = ((max - average) / average) * 100;
+      const findings = [
+        spikeCount === 0 
+        ? 'No unusual spikes this period. Daily usage stayed within its normal range'
+        : spikeCount + ' spike day' + (spikeCount === 1 ? '' : 's') + ' this period, above ' + fmt(spikeThreshold) + ' kWh.',
+        'Highest usage was ' + fmt(max) + ' kWh on ' + maxDate + ', ' + peakPct.toFixed(0) + '% above the daily average.',
+        'Daily usage ranged from ' + fmt(min)+ ' to ' + fmt(max) + ' kWh.'
+      ];
+
+      const boxH = 10 + findings.length * 5.5;
+      doc.setFillColor(...tint);
+      doc.setDrawColor(...line);
+      doc.setLineWidth(0.2);
+      doc.roundedRect(margin, y, contentW, boxH, 2, 2, 'FD');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...muted);
+      doc.text('KEY FINDINGS', margin + 4, y + 6);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.setTextColor(...text);
+      findings.forEach(function (f, i){
+        doc.text('\u2022  ' + f, margin + 4 , y + 12 + i * 5.5);
+
+      });
+      y += boxH + 6;
+
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(11);
       doc.setTextColor(...text);
       doc.text('Daily usage', margin, y);
       y += 4; 
 
-      const chartH = 70;
+      const chartH = 56;
       doc.setFillColor(...panel);
       doc.roundedRect(margin, y, contentW, chartH, 2.5, 2.5, 'F');
 
@@ -457,7 +488,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       
 
       }
-      y += chartH + 10;
+      y += chartH + 8;
 
     // Readings table
 
@@ -469,7 +500,7 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
       // x position of each column
       const col = { date: margin + 4, kwh: margin + 80, diff: margin + 130, flag: pageW - margin - 4 };
-      const rowH = 7;
+      const rowH = 6.3;
 
       function tableHeader() {
         doc.setFillColor(...ink);
@@ -542,6 +573,21 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
       doc.setDrawColor(...line);
       doc.line(margin, y, pageW - margin, y);
+      if (y + 14 > pageH - 22) {
+        doc.addPage();
+        y = margin;
+
+      }
+
+      y += 7 
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...muted);
+      doc.text('HOW TO READ THIS REPORT', margin, y);
+      doc.setFontSize(8.5);
+      const howTo = 'Red percentages (%) are above the daily average and green are below. PEAK and LOWEST mark the highest and lowest days. ' +
+        'SPIKE marks an unusally high day: more than 1.5 standard deviations above this period\'s average (above ' + fmt(spikeThreshold) + 'kWh).';
+      doc.text(doc.splitTextToSize(howTo, contentW), margin, y + 5);
 
       // Footer on every page
       const pages = doc.getNumberOfPages();
