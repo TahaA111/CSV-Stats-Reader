@@ -285,6 +285,66 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
 
     });
 
+    function makePdfChartImage() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1640;
+      canvas.height = 600;
+
+      const pdfChart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: dateLabels,
+          datasets : [
+            {
+              label: 'kWh usage',
+              data: kwhValues,
+              borderColor: 'D9A21B',
+              borderWidth: 3, 
+              pointBackgroundColor: kwhValues.map(function (v) { return v > spikeThreshold ? '#E06C75' : '#D9A21B'; }),
+              pointRadius: kwhValues.map(function (v) { return v > spikeThreshold ? 7 : 3;})
+            },
+            {
+              label: 'Spike Threshold',
+              data: kwhValues.map(function () { return spikeThreshold; }),
+              borderColor: '#E06C75',
+              borderDash: [10,6],
+              borderWidth: 2,
+              pointRadius: 0
+            }
+          ]
+        },
+       options: {
+          responsive: false,
+          animation: false,
+          devicePixelRatio: 1,
+          plugins: {
+            legend: { labels: { color: '#F1EFEA', font: { size: 22 } } }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#C9C6BF', font: { size: 18 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+              grid: { color: '#2A2A2D' }
+            },
+            y: {
+              ticks: { color: '#C9C6BF', font: { size: 18 } },
+              grid: { color: '#2A2A2D' },
+              title: { display: true, text: 'kWh', color: '#C9C6BF', font: { size: 18 } }
+            }
+          }
+        }
+      });
+
+      const flat = document.createElement('canvas');
+      flat.width = canvas.width;
+      flat.height = canvas.height;
+      const ctx = flat.getContext('2d');
+      ctx.fillStyle = '#151517';
+      ctx.fillRect(0, 0, flat.width, flat.height);
+      ctx.drawImage(canvas, 0, 0);
+      pdfChart.destroy();
+      return flat.toDataURL('image/jpeg', 0.95);
+    }
+
     function buildReport() {
       const doc = new jspdf.jsPDF({ unit: "mm", format: 'a4' });
       const pageW = 210;
@@ -390,25 +450,11 @@ Upload a CSV file with <code>date</code> and <code>kwh</code> columns. <br>
       doc.setFillColor(...panel);
       doc.roundedRect(margin, y, contentW, chartH, 2.5, 2.5, 'F');
 
-      if(myChart){
+      if(kwhValues.length > 0) {
+        const img = makePdfChartImage();
+        doc.addImage(img, 'JPEG', margin + 4, y + 4, contentW - 8, chartH -8);
 
-        const src = myChart.canvas;
-        const flat = document.createElement('canvas');
-        flat.width = src.width;
-        flat.height = src.height;
-        const ctx = flat.getContext('2d');
-        ctx.fillStyle = '#151517';
-        ctx.fillRect(0,0, flat.width, flat.height );
-        ctx.drawImage(src, 0, 0);
-        const img = flat.toDataURL('image/jpeg', 0.95);
-
-
-        const boxW = contentW - 8;
-        const boxH = chartH - 8;
-        const scale = Math.min(boxW / flat.width, boxH / flat.height);
-        const w = flat.width * scale;
-        const h = flat.height * scale;
-        doc.addImage(img, 'JPEG', margin + 4 + (boxW - w) / 2, y + 4 + (boxH - h) / 2 , w, h);
+      
 
       }
       y += chartH + 10;
